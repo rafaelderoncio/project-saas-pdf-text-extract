@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Project.SaaS.ScanFlow.API/Project.SaaS.ScanFlow.API.csproj" />
+  <Project Path="Project.SaaS.ScanFlow.Core/Project.SaaS.ScanFlow.Core.csproj" />
+  <Project Path="Project.SaaS.ScanFlow.Domain/Project.SaaS.ScanFlow.Domain.csproj" />
+  <Project Path="Project.SaaS.ScanFlow.Tests/Project.SaaS.ScanFlow.Tests.csproj" />
+  <Project Path="Project.SaaS.ScanFlow.Worker/Project.SaaS.ScanFlow.Worker.csproj" />
+</Solution>

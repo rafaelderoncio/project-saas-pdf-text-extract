@@ -1,0 +1,6 @@
+@Project.SaaS.ScanFlow.API_HostAddress = http://localhost:5049
+
+GET {{Project.SaaS.ScanFlow.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
