@@ -1,0 +1,111 @@
+services:
+  postgres-primary:
+    image: postgres:17-alpine
+    container_name: scanflow-postgres-primary
+    environment:
+      POSTGRES_DB: scanflow
+      POSTGRES_USER: scanflowwrite
+      POSTGRES_PASSWORD: scanflowwrite
+      POSTGRES_REPLICATION_USER: scanflowread
+      POSTGRES_REPLICATION_PASSWORD: scanflowread
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_primary_data:/var/lib/postgresql/data
+      - ../data/primary_postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - ../data/primary_pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
+      - ../data/init-replication.sql:/docker-entrypoint-initdb.d/00-replication.sql:ro
+      - ../data/scan-flow-ddl.sql:/docker-entrypoint-initdb.d/01-scan-flow-ddl.sql:ro
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf -c hba_file=/etc/postgresql/pg_hba.conf
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U scanflowwrite -d scanflow" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  postgres-replica:
+    image: postgres:17-alpine
+    container_name: scanflow-postgres-replica
+    environment:
+      POSTGRES_DB: scanflow
+      POSTGRES_USER: scanflowread
+      POSTGRES_PASSWORD: scanflowread
+      POSTGRES_REPLICATION_USER: scanflowread
+      POSTGRES_REPLICATION_PASSWORD: scanflowread
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_replica_data:/var/lib/postgresql/data
+    depends_on:
+      - postgres-primary
+    command: >
+      sh -c " until pg_isready -h postgres-primary -U scanflowwrite; do sleep 2; done && rm -rf /var/lib/postgresql/data/* && PGPASSWORD=scanflowread pg_basebackup -h postgres-primary -D /var/lib/postgresql/data -U scanflowread -Fp -Xs -P -R && echo \"restore_command = 'cp /var/lib/postgresql/data/archive/%f %p'\" >> /var/lib/postgresql/data/postgresql.auto.conf && chown -R postgres:postgres /var/lib/postgresql/data && chmod 700 /var/lib/postgresql/data && exec gosu postgres postgres "
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U scanflowread -d scanflow" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    container_name: scanflow-minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: [ "CMD", "mc", "ready", "local" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: scanflow-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      sh -c "
+      until mc alias set local http://minio:9000 minioadmin minioadmin; do sleep 2; done &&
+      mc mb -p local/files || true &&
+      : > /tmp/.keep &&
+      mc cp /tmp/.keep local/files/proc/.keep &&
+      mc cp /tmp/.keep local/files/raw/.keep
+      "
+    restart: "no"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: scanflow-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: mscott
+      RABBITMQ_DEFAULT_PASS: IoSo1F4nt4$71c0
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ../data/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ../data/enabled_plugins:/etc/rabbitmq/enabled_plugins:ro
+      - ../data/definitions.json:/etc/rabbitmq/definitions.json:ro
+    ports:
+      - "5672:5672" # Client
+      - "15672:15672" # UI
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  pg_primary_data:
+  pg_replica_data:
+  minio_data:
+  rabbitmq_data:
