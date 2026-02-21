@@ -54,7 +54,18 @@ services:
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-    command: server /data --console-address ":9001"
+    entrypoint: ["/bin/sh"]
+    command:
+      - -c
+      - |
+        minio server /data --console-address ':9001' &
+        MINIO_PID=$$!
+        until mc alias set local http://127.0.0.1:9000 "$${MINIO_ROOT_USER}" "$${MINIO_ROOT_PASSWORD}"; do sleep 2; done
+        mc mb -p local/files || true
+        : > /tmp/.keep
+        mc cp /tmp/.keep local/files/proc/.keep
+        mc cp /tmp/.keep local/files/raw/.keep
+        wait $$MINIO_PID
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -67,28 +78,12 @@ services:
       retries: 5
     restart: unless-stopped
 
-  minio-init:
-    image: minio/mc:latest
-    container_name: scanflow-minio-init
-    depends_on:
-      minio:
-        condition: service_healthy
-    entrypoint: >
-      sh -c "
-      until mc alias set local http://minio:9000 minioadmin minioadmin; do sleep 2; done &&
-      mc mb -p local/files || true &&
-      : > /tmp/.keep &&
-      mc cp /tmp/.keep local/files/proc/.keep &&
-      mc cp /tmp/.keep local/files/raw/.keep
-      "
-    restart: "no"
-
   rabbitmq:
     image: rabbitmq:3-management
     container_name: scanflow-rabbitmq
     environment:
-      RABBITMQ_DEFAULT_USER: mscott
-      RABBITMQ_DEFAULT_PASS: IoSo1F4nt4$71c0
+      RABBITMQ_DEFAULT_USER: rabbitmqadmin
+      RABBITMQ_DEFAULT_PASS: rabbitmqadmin
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
       - ../data/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
