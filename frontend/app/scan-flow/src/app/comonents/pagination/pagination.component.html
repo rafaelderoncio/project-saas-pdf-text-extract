@@ -1,0 +1,29 @@
+<div class="pagination">
+  <div class="pagination-info">Mostrando <b>{{ shown }}</b> de <b>{{ total }}</b> registros</div>
+
+    <div class="pagination-controls">
+      <button type="button" class="nav-btn" [disabled]="page <= 1" (click)="previousPage()">&lt;</button>
+
+      <div class="page-numbers">
+        @for (pageNumber of pageNumbers(); track pageNumber) {
+          <button
+            type="button"
+            class="page-btn"
+            [class.active]="pageNumber === page"
+            (click)="goToPage(pageNumber)"
+          >
+            {{ pageNumber }}
+          </button>
+        }
+      </div>
+
+      <button type="button" class="nav-btn" [disabled]="page >= totalPages" (click)="nextPage()">&gt;</button>
+      
+    </div>
+
+    <select class="page-size-select" [value]="pageSize" (change)="onPageSizeSelect($event)">
+      @for (size of pageSizes; track size) {
+        <option [value]="size" [selected]="size === pageSize">{{ size }} por página</option>
+      }
+    </select>
+</div>

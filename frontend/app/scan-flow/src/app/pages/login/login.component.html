@@ -1,0 +1,31 @@
+<main class="login-page">
+  <section class="login-card">
+    <h1>Login</h1>
+
+    <form class="login-form" (submit)="onSubmit(); $event.preventDefault()">
+      <input
+        type="text"
+        name="username"
+        placeholder="usuario"
+        [value]="username"
+        (input)="username = $any($event.target).value"
+        autocomplete="username"
+      />
+
+      <input
+        type="password"
+        name="password"
+        placeholder="senha"
+        [value]="password"
+        (input)="password = $any($event.target).value"
+        autocomplete="current-password"
+      />
+
+      <button type="submit">Entrar</button>
+    </form>
+
+    @if (errorMessage) {
+      <p class="message error">{{ errorMessage }}</p>
+    }
+  </section>
+</main>

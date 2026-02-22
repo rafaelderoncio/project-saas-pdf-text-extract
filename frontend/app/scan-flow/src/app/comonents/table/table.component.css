@@ -1,0 +1,145 @@
+:host {
+  display: block;
+  height: 100%;
+  min-height: 0;
+}
+
+.table-card {
+  height: 100%;
+  min-height: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--surface-bg);
+  overflow: hidden;
+}
+
+.table-scroll {
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.table-scroll.scroll-enabled {
+  height: 520px;
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 12px 10px;
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--muted-text);
+  background: var(--surface-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+tbody td {
+  padding: 11px 10px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.85rem;
+  color: var(--primary-text);
+  white-space: nowrap;
+  text-align: center;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody td.file-name {
+  font-weight: 600;
+  /* text-align: left !important; */
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.status-success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-process {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.status-error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.action-btn {
+  border: 1px solid var(--border-color);
+  background: var(--input-bg);
+  color: var(--primary-text);
+  border-radius: 7px;
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.action-passive {
+  display: inline-block;
+  color: var(--muted-text);
+  opacity: 0.65;
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+.empty-cell {
+  text-align: center;
+  color: var(--muted-text);
+  padding: 28px 12px;
+}
+
+
+@media (max-width: 1100px) {
+  th:nth-child(3),
+  td:nth-child(3),
+  th:nth-child(5),
+  td:nth-child(5) {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .table-scroll.scroll-enabled {
+    height: 420px;
+    max-height: 420px;
+  }
+
+  th:nth-child(4),
+  td:nth-child(4) {
+    display: none;
+  }
+
+  tbody td {
+    font-size: 0.8rem;
+    padding: 10px 8px;
+  }
+}

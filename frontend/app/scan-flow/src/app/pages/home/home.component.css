@@ -1,0 +1,126 @@
+:host {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.home-page {
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--app-bg);
+  font-family: var(--app-font);
+}
+
+.home-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1440px;
+  height: 100%;
+  background: var(--surface-bg);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.06);
+  text-align: left;
+}
+
+.home-topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 0px 18px 0px 18px;
+  padding: 10px;
+}
+
+.filter-input {
+  flex: 1 1 280px;
+  min-width: 220px;
+  height: 38px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--primary-text);
+  padding: 0 12px;
+}
+
+.filter-select {
+  height: 38px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--primary-text);
+  padding: 0 10px;
+  min-width: 170px;
+}
+
+.home-content {
+  height: 100%;
+  margin: 0px 18px 0px 18px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.content-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+.content-pagination {
+  margin-top: auto;
+}
+
+.import-button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  background: var(--brand-color);
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.import-button:hover {
+  background: var(--brand-color-hover);
+}
+
+.imported-file {
+  margin: 14px 0 0;
+  color: var(--primary-text);
+}
+
+@media (max-width: 900px) {
+  .home-page {
+    padding: 12px;
+  }
+
+  .home-card {
+    padding: 12px;
+  }
+
+  .home-topbar,
+  .home-content {
+    margin: 10px;
+  }
+}
+
+@media (max-width: 560px) {
+  .home-topbar {
+    justify-content: stretch;
+  }
+
+  .filter-input,
+  .filter-select,
+  .import-button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+.app-footer {
+  box-sizing: border-box;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--footer-bg);
+  border-top: 1px solid var(--border-color);
+  color: var(--muted-text);
+  z-index: 1000;
+}

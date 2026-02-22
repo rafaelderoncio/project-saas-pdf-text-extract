@@ -1,0 +1,44 @@
+<section class="table-card">
+  <div class="table-scroll" [class.scroll-enabled]="shouldEnableScroll()">
+    <table>
+      <thead>
+        <tr>
+          <th >Arquivo</th>
+          <th>Tamanho</th>
+          <th>Tipo</th>
+          <th>Envio</th>
+          <th>Processamento</th>
+          <th>Status</th>
+          <th class="action-head">Ação</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (items.length === 0) {
+          <tr>
+            <td colspan="7" class="empty-cell">Nenhum arquivo disponível nesta página.</td>
+          </tr>
+        } @else {
+          @for (item of items; track item.arquivo + item.envio) {
+            <tr>
+              <td class="file-name">{{ item.arquivo }}</td>
+              <td>{{ item.tamanho }}</td>
+              <td>{{ item.tipo }}</td>
+              <td>{{ item.envio }}</td>
+              <td>{{ item.processamento }}</td>
+              <td>
+                <span class="status-badge" [class.status-success]="item.status === 'Concluido'" [class.status-process]="item.status === 'Processando'" [class.status-error]="item.status === 'Erro'">{{ item.status }}</span>
+              </td>
+              <td class="action-cell">
+                @if (isPassiveAction(item.acao)) {
+                  <span class="action-passive">{{ item.acao }}</span>
+                } @else {
+                  <button type="button" class="action-btn">{{ item.acao }}</button>
+                }
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

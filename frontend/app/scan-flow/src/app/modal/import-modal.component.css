@@ -1,0 +1,123 @@
+:host {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 6, 23, 0.56);
+  padding: 20px;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 14px;
+  background: var(--surface-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 20px 44px rgba(2, 6, 23, 0.35);
+  padding: 18px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--primary-text);
+}
+
+.close-button {
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--primary-text);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.dropzone {
+  position: relative;
+  height: 180px;
+  border: 2px dashed var(--border-color);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--muted-text);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.dropzone.dragging {
+  border-color: var(--brand-color);
+  background: color-mix(in srgb, var(--brand-color) 12%, transparent);
+}
+
+.file-input {
+  display: none;
+}
+
+.dropzone-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-text);
+}
+
+.dropzone-subtitle {
+  font-size: 0.9rem;
+}
+
+.file-icon {
+  font-size: 3rem;
+}
+
+.file-name {
+  margin: 12px 0 0;
+  color: var(--primary-text);
+}
+
+.error {
+  margin: 10px 0 0;
+  color: #dc2626;
+  display: flex;
+  justify-content: center;
+}
+
+.modal-actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-actions button {
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.modal-actions .secondary {
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--primary-text);
+}
+
+.modal-actions .primary {
+  border: none;
+  background: var(--brand-color);
+  color: #ffffff;
+}

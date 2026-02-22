@@ -1,0 +1,51 @@
+<main class="home-page">
+  <section class="home-card">
+
+    <div class="home-topbar">
+      <input
+        type="text"
+        class="filter-input"
+        placeholder="Filtrar por nome do arquivo..."
+        [value]="nomeFiltro"
+        (input)="onNomeFiltroChange($event)"
+      />
+
+      <select class="filter-select" [value]="ordenacao" (change)="onOrdenacaoChange($event)">
+        <option value="envio_desc">Envio: mais recente</option>
+        <option value="envio_asc">Envio: mais antigo</option>
+        <option value="processamento_desc">Processamento: mais recente</option>
+        <option value="processamento_asc">Processamento: mais antigo</option>
+      </select>
+
+      <select class="filter-select" [value]="statusFiltro" (change)="onStatusFiltroChange($event)">
+        <option value="">Status: todos</option>
+        <option value="Concluido">Concluido</option>
+        <option value="Processando">Processando</option>
+        <option value="Erro">Erro</option>
+      </select>
+
+      <button type="button" class="import-button" (click)="openImportModal()">+ Importar</button>
+    </div>
+   
+    <div class="home-content">
+      <app-table class="content-body" [items]="itemsPaged.items" [pageSize]="pageSize"></app-table>
+
+      <app-pagination
+        class="content-pagination"
+        [shown]="itemsPaged.items.length"
+        [total]="itemsPaged.totalItems"
+        [page]="page"
+        [totalPages]="itemsPaged.totalPages"
+        [pageSize]="pageSize"
+        [pageSizes]="pageSizes"
+        (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)"
+      ></app-pagination>
+    </div>
+
+  </section>
+</main>
+
+@if (isImportModalOpen) {
+  <app-import-modal (closed)="closeImportModal()" (pdfSelected)="onPdfSelected($event)"></app-import-modal>
+}
